@@ -2,6 +2,7 @@ const express = require("express")
 const app = express()
 const fs = require('fs')
 const knex = require('./connectDB');
+const connection = require('./connectDB');
 
 app.use(express.json());
 app.post("/signup",(req,res,next)=>{
@@ -12,18 +13,31 @@ app.post("/signup",(req,res,next)=>{
     }
     knex('users').insert(user).then(() => {
         console.log("done")
-
-
-
     })
-    // let data = fs.readFileSync('data.json')
-    // data = data.toString();
-    // let Data = JSON.parse(data)
-    // user.id = Data.length + 1;
-    // Data.push(user)
-    // fs.writeFileSync("data.json", JSON.stringify(Data,null,2))
     return res.json(user)
 
 })
+
+app.post("/login",(request,response,next)=>{
+    var email = request.body.email;
+    console.log(email)
+    var password = request.body.password;
+    console.log(password)
+    knex('users').select('*').then((loginData) => {
+        for (let index = 0; index < loginData.length; index++) {
+            if (loginData[index].email===email && loginData[index].password===password){
+                console.log(loginData[index].username,"cong.... you are logined in ")
+                response.send(loginData[index].username+"  cong.... you are logined in ")
+            }else{
+                console.log("check your email and password")
+                response.send("check your email and password")
+            }
+            
+        }
+        
+    });
+});
+
+
 
 app.listen(3000, () => console.log('server is listening'));

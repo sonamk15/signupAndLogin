@@ -5,7 +5,7 @@ const connection = mysql.createConnection({
   password: 'navgurukul',
   database: 'myapp'
 });
-// module.exports = knex;
+module.exports = connection;
 connection.connect(function(err) {
     if (err) {
       console.error('error connecting: ' + err.stack);
@@ -51,4 +51,9 @@ connection.connect(function(err) {
     }
     return console.log('table is created!')
   })
+  
+
+
+
+
   
